@@ -3,9 +3,9 @@ import PropTypes from "prop-types";
 import React from "react";
 import { TextInput, View, Text, StyleSheet, Platform } from "react-native";
 
-const TextInputField = ({ onChange, value, textInputProps }) => (
+const TextInputField = ({ onChange, value, textInputProps, isValid }) => (
   <TextInput
-    style={styles.input}
+    style={isValid ? styles.input : styles.invalidInput}
     onChangeText={onChange}
     value={value}
     placeholderTextColor="#8A8A8A"
@@ -39,6 +39,7 @@ export const EditableText = ({
   autoCorrect,
   prefix = "",
   options = [],
+  isValid = true,
 }) => {
   const textInputProps = {
     autoComplete,
@@ -59,6 +60,7 @@ export const EditableText = ({
             onChange={onChange}
             value={value}
             textInputProps={textInputProps}
+            isValid={isValid}
           />
         )
       ) : (
@@ -111,11 +113,20 @@ const styles = StyleSheet.create({
     color: "white",
     width: "100%",
   },
+  invalidInput: {
+    height: 40,
+    borderWidth: 1,
+    padding: 10,
+    backgroundColor: "#272729",
+    borderColor: "#444444",
+    color: "white",
+    width: "100%",
+    borderColor: "red",
+  },
   iosPicker: {
     height: 130,
     width: "100%",
     color: "white",
-
   },
   iosPickerItem: {
     height: "100%",

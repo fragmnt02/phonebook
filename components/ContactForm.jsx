@@ -17,12 +17,32 @@ export const ContactForm = ({
   onContactInfoChange,
   initialContactInfo,
 }) => {
-  const [contactInfo, setContactInfo] = useState(initialContactInfo ?? EMPTY_STATE);
+  const [contactInfo, setContactInfo] = useState(
+    initialContactInfo ?? EMPTY_STATE
+  );
+  const [isEmailValid, setIsEmailValid] = useState(true);
+  const [isPhoneValid, setIsPhoneValid] = useState(true);
 
-  const handleChange = (property) => (value) =>
+  const validatePhone = (phone) => {
+    const re = /^[0-9]{10}$/;
+    return re.test(phone);
+  };
+
+  const validateEmail = (email) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(String(email).toLowerCase());
+  };
+
+  const handleChange = (property) => (value) => {
+    if (property === "email") {
+      setIsEmailValid(validateEmail(value));
+    }
+
+    if (property === "phone") {
+      setIsPhoneValid(validatePhone(value));
+    }
     setContactInfo((c) => ({ ...c, [property]: value }));
-
-    
+  };
 
   useEffect(() => {
     onContactInfoChange(contactInfo);
@@ -61,6 +81,7 @@ export const ContactForm = ({
         keyboardType="phone-pad"
         autoComplete="off"
         prefix="Tel: "
+        isValid={isPhoneValid}
       />
       <EditableText
         value={contactInfo.email}
@@ -73,6 +94,7 @@ export const ContactForm = ({
         autoComplete="off"
         autoCorrect={false}
         prefix="Email: "
+        isValid={isEmailValid}
       />
       <Text style={styles.label}>Contact Type</Text>
       <EditableText
