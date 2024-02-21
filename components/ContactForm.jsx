@@ -22,6 +22,8 @@ export const ContactForm = ({
   const handleChange = (property) => (value) =>
     setContactInfo((c) => ({ ...c, [property]: value }));
 
+    
+
   useEffect(() => {
     onContactInfoChange(contactInfo);
   }, [contactInfo]);

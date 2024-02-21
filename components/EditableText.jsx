@@ -1,7 +1,7 @@
-import { Picker } from '@react-native-picker/picker';
-import PropTypes from 'prop-types';
-import React from 'react';
-import { TextInput, View, Text, StyleSheet } from 'react-native';
+import { Picker } from "@react-native-picker/picker";
+import PropTypes from "prop-types";
+import React from "react";
+import { TextInput, View, Text, StyleSheet, Platform } from "react-native";
 
 const TextInputField = ({ onChange, value, textInputProps }) => (
   <TextInput
@@ -17,7 +17,8 @@ const PickerField = ({ options, onChange, value }) => (
   <Picker
     selectedValue={value}
     onValueChange={onChange}
-    style={styles.input}
+    style={Platform.OS === "ios" ? styles.iosPicker : styles.input}
+    itemStyle={styles.iosPickerItem}
     dropdownIconColor="white"
   >
     {options.map((item) => (
@@ -54,7 +55,11 @@ export const EditableText = ({
         options.length ? (
           <PickerField options={options} onChange={onChange} value={value} />
         ) : (
-          <TextInputField onChange={onChange} value={value} textInputProps={textInputProps} />
+          <TextInputField
+            onChange={onChange}
+            value={value}
+            textInputProps={textInputProps}
+          />
         )
       ) : (
         <Text style={styles.text}>{`${prefix}${value}`}</Text>
@@ -78,14 +83,14 @@ EditableText.propTypes = {
 };
 
 EditableText.defaultProps = {
-  value: '',
+  value: "",
   autoComplete: undefined,
   inputMode: undefined,
   keyboardType: undefined,
   placeholder: undefined,
   autoCapitalize: undefined,
   autoCorrect: false,
-  prefix: '',
+  prefix: "",
   options: [],
 };
 
@@ -94,16 +99,28 @@ const styles = StyleSheet.create({
     height: 40,
     borderTopWidth: 1,
     padding: 10,
-    borderColor: '#444444',
-    color: 'white',
+    borderColor: "#444444",
+    color: "white",
   },
   input: {
     height: 40,
     borderTopWidth: 1,
     padding: 10,
-    backgroundColor: '#272729',
-    borderColor: '#444444',
-    color: 'white',
+    backgroundColor: "#272729",
+    borderColor: "#444444",
+    color: "white",
+    width: "100%",
+  },
+  iosPicker: {
+    height: 130,
+    width: "100%",
+    color: "white",
+
+  },
+  iosPickerItem: {
+    height: "100%",
+    width: "100%",
+    color: "white",
   },
 });
 
