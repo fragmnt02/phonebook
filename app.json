@@ -21,7 +21,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#000000"
-      }
+      },
+      "package": "com.francisco.arce.distillery.phonebook"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -30,6 +31,14 @@
       "expo-router",
       "expo-secure-store"
     ],
-    "scheme": "com.francisco.arce"
+    "scheme": "com.francisco.arce",
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "49cdaf26-3f89-4181-bb94-564f76dfa7e0"
+      }
+    }
   }
 }
