@@ -16,6 +16,7 @@ export const ContactForm = ({
   handleDelete,
   onContactInfoChange,
   initialContactInfo,
+  setIsFormValid,
 }) => {
   const [contactInfo, setContactInfo] = useState(
     initialContactInfo ?? EMPTY_STATE
@@ -46,6 +47,7 @@ export const ContactForm = ({
 
   useEffect(() => {
     onContactInfoChange(contactInfo);
+    setIsFormValid(isEmailValid && isPhoneValid);
   }, [contactInfo]);
 
   return (

@@ -3,14 +3,28 @@ import { Stack, useNavigation } from "expo-router";
 
 import { useContacts } from "../../hooks/useContacts";
 import { ContactForm } from "../../components/ContactForm";
-import { Pressable, StyleSheet, Text } from "react-native";
+import { Alert, Pressable, StyleSheet, Text } from "react-native";
 
 const ContactDetailScreen = () => {
   const [contactInfo, setContactInfo] = useState();
+  const [isFormValid, setIsFormValid] = useState(true);
   const navigation = useNavigation();
   const { createContact } = useContacts();
 
   const saveContact = async () => {
+    if (
+      !isFormValid ||
+      !contactInfo.firstName ||
+      !contactInfo.lastName ||
+      !contactInfo.phone ||
+      !contactInfo.email
+    ) {
+      Alert.alert(
+        "Need to add all data",
+        "Should fill all name inputs and a valid email or phone number"
+      );
+      return;
+    }
     await createContact(contactInfo);
     navigation.goBack();
     return;
@@ -27,7 +41,11 @@ const ContactDetailScreen = () => {
           ),
         }}
       />
-      <ContactForm isCreation onContactInfoChange={setContactInfo} />
+      <ContactForm
+        isCreation
+        onContactInfoChange={setContactInfo}
+        setIsFormValid={setIsFormValid}
+      />
     </>
   );
 };

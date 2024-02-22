@@ -10,6 +10,7 @@ const ContactDetailScreen = () => {
   const params = useLocalSearchParams();
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isFormValid, setIsFormValid] = useState(true);
   const [contactInfo, setContactInfo] = useState();
   const { getContact, updateContact, deleteContact } = useContacts();
 
@@ -35,6 +36,19 @@ const ContactDetailScreen = () => {
     }
 
     // save updated contact
+    if (
+      !isFormValid ||
+      !contactInfo.firstName ||
+      !contactInfo.lastName ||
+      !contactInfo.phone ||
+      !contactInfo.email
+    ) {
+      Alert.alert(
+        "Need to add all data",
+        "Should fill all name inputs and a valid email or phone number"
+      );
+      return;
+    }
     await updateContact(params.id, contactInfo);
     setIsEditing(false);
   };
@@ -64,6 +78,7 @@ const ContactDetailScreen = () => {
           handleDelete={handleDelete}
           initialContactInfo={contactInfo}
           onContactInfoChange={setContactInfo}
+          setIsFormValid={setIsFormValid}
         />
       )}
     </>
