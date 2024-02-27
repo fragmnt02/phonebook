@@ -1,6 +1,8 @@
-import { View, Text, Pressable, StyleSheet } from "react-native";
-import { EditableText } from "./EditableText";
+import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
+import { View, Text, Pressable, StyleSheet } from "react-native";
+
+import { EditableText } from "./EditableText";
 
 const EMPTY_STATE = {
   firstName: "",
@@ -128,3 +130,12 @@ const styles = StyleSheet.create({
   },
   container: { flex: 1, backgroundColor: "black", paddingTop: 15 },
 });
+
+ContactForm.propTypes = {
+  isEditing: PropTypes.bool,
+  isCreation: PropTypes.bool,
+  handleDelete: PropTypes.func,
+  onContactInfoChange: PropTypes.func,
+  initialContactInfo: PropTypes.object,
+  setIsFormValid: PropTypes.func,
+};

@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Alert, Pressable, StyleSheet, Text } from "react-native";
 import { useLocalSearchParams, Stack, useNavigation } from "expo-router";
 
-import { useContacts } from "../../hooks/useContacts";
+import { ContactsContext } from "../../providers/ContactsProvider";
 import { ContactForm } from "../../components/ContactForm";
 
 const ContactDetailScreen = () => {
@@ -12,7 +12,7 @@ const ContactDetailScreen = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isFormValid, setIsFormValid] = useState(true);
   const [contactInfo, setContactInfo] = useState();
-  const { getContact, updateContact, deleteContact } = useContacts();
+  const { getContact, updateContact, deleteContact } =  useContext(ContactsContext);
 
   useEffect(() => {
     const loadContact = async () => {

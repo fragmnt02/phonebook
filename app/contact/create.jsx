@@ -1,15 +1,15 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Stack, useNavigation } from "expo-router";
 
-import { useContacts } from "../../hooks/useContacts";
+import { ContactsContext } from "../../providers/ContactsProvider";
 import { ContactForm } from "../../components/ContactForm";
 import { Alert, Pressable, StyleSheet, Text } from "react-native";
 
-const ContactDetailScreen = () => {
+const CreateContactScreen = () => {
   const [contactInfo, setContactInfo] = useState();
   const [isFormValid, setIsFormValid] = useState(true);
   const navigation = useNavigation();
-  const { createContact } = useContacts();
+  const { createContact }  = useContext(ContactsContext);
 
   const saveContact = async () => {
     if (
@@ -50,7 +50,7 @@ const ContactDetailScreen = () => {
   );
 };
 
-export default ContactDetailScreen;
+export default CreateContactScreen;
 
 const styles = StyleSheet.create({
   title: { color: "white" },

@@ -1,7 +1,7 @@
-import React from 'react';
-import { Text, StyleSheet, Pressable } from 'react-native';
-import { Link } from 'expo-router';
-import PropTypes from 'prop-types';
+import React from "react";
+import { Text, StyleSheet, Pressable } from "react-native";
+import { Link } from "expo-router";
+import PropTypes from "prop-types";
 
 export const ContactListItem = ({ firstName, lastName, id }) => {
   return (
@@ -21,13 +21,13 @@ ContactListItem.propTypes = {
 
 const styles = StyleSheet.create({
   container: {
-    width: '100%',
+    width: "100%",
     borderTopWidth: 1,
     borderBottomWidth: 1,
     padding: 8,
-    borderColor: 'gray',
+    borderColor: "gray",
   },
-  text: { fontSize: 16, color: 'white' },
+  text: { fontSize: 16, color: "white" },
 });
 
 export default React.memo(ContactListItem);
