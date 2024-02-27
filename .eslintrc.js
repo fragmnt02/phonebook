@@ -1,33 +1,21 @@
 module.exports = {
-    "env": {
-        "browser": true,
-        "es2021": true
+  extends: [
+    "universe",
+    "universe/native",
+    "universe/web",
+    "universe/shared/typescript-analysis",
+  ],
+  overrides: [
+    {
+      files: ["*.ts", "*.tsx", "*.d.ts"],
+      parserOptions: {
+        project: "./tsconfig.json",
+      },
     },
-    "extends": [
-        "eslint:recommended",
-        "plugin:react/recommended"
-    ],
-    "overrides": [
-        {
-            "env": {
-                "node": true
-            },
-            "files": [
-                ".eslintrc.{js,cjs}"
-            ],
-            "parserOptions": {
-                "sourceType": "script"
-            }
-        }
-    ],
-    "parserOptions": {
-        "ecmaVersion": "latest",
-        "sourceType": "module"
-    },
-    "plugins": [
-        "react"
-    ],
-    "rules": {
-        "react/react-in-jsx-scope": "off",
-    }
-}
+  ],
+  plugins: ["react-hooks"],
+  rules: {},
+  env: {
+    node: true,
+  },
+};

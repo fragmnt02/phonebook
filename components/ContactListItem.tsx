@@ -1,9 +1,14 @@
-import React from "react";
-import { Text, StyleSheet, Pressable } from "react-native";
 import { Link } from "expo-router";
-import PropTypes from "prop-types";
+import { memo } from "react";
+import { Text, StyleSheet, Pressable } from "react-native";
 
-export const ContactListItem = ({ firstName, lastName, id }) => {
+interface Props {
+  firstName: string;
+  lastName: string;
+  id: string;
+}
+
+const ContactListItem = ({ firstName, lastName, id }: Props) => {
   return (
     <Pressable style={styles.container} accessibilityRole="button">
       <Link href={`/contact/${id}`}>
@@ -11,12 +16,6 @@ export const ContactListItem = ({ firstName, lastName, id }) => {
       </Link>
     </Pressable>
   );
-};
-
-ContactListItem.propTypes = {
-  firstName: PropTypes.string.isRequired,
-  lastName: PropTypes.string.isRequired,
-  id: PropTypes.string.isRequired,
 };
 
 const styles = StyleSheet.create({
@@ -30,4 +29,4 @@ const styles = StyleSheet.create({
   text: { fontSize: 16, color: "white" },
 });
 
-export default React.memo(ContactListItem);
+export default memo(ContactListItem);

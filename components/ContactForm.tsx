@@ -1,10 +1,19 @@
-import PropTypes from "prop-types";
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import { View, Text, Pressable, StyleSheet } from "react-native";
 
 import { EditableText } from "./EditableText";
+import { Contact, DraftContact } from "../types";
 
-const EMPTY_STATE = {
+interface Props {
+  isEditing?: boolean;
+  isCreation?: boolean;
+  handleDelete?: () => void;
+  onContactInfoChange: (value: DraftContact | Contact) => void;
+  initialContactInfo?: DraftContact | null;
+  setIsFormValid: (value: boolean) => void;
+}
+
+const EMPTY_STATE: DraftContact = {
   firstName: "",
   lastName: "",
   phone: "",
@@ -12,31 +21,31 @@ const EMPTY_STATE = {
   type: "Personal",
 };
 
-export const ContactForm = ({
+const ContactForm = ({
   isEditing,
   isCreation,
   handleDelete,
   onContactInfoChange,
   initialContactInfo,
   setIsFormValid,
-}) => {
-  const [contactInfo, setContactInfo] = useState(
-    initialContactInfo ?? EMPTY_STATE
+}: Props) => {
+  const [contactInfo, setContactInfo] = useState<DraftContact | Contact>(
+    initialContactInfo ?? EMPTY_STATE,
   );
   const [isEmailValid, setIsEmailValid] = useState(true);
   const [isPhoneValid, setIsPhoneValid] = useState(true);
 
-  const validatePhone = (phone) => {
+  const validatePhone = (phone: string) => {
     const re = /^[0-9]{10}$/;
     return re.test(phone);
   };
 
-  const validateEmail = (email) => {
+  const validateEmail = (email: string) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(String(email).toLowerCase());
   };
 
-  const handleChange = (property) => (value) => {
+  const handleChange = (property: keyof Contact) => (value: string) => {
     if (property === "email") {
       setIsEmailValid(validateEmail(value));
     }
@@ -52,12 +61,14 @@ export const ContactForm = ({
     setIsFormValid(isEmailValid && isPhoneValid);
   }, [contactInfo]);
 
+  const isEditView: boolean = Boolean(isCreation ?? isEditing);
+
   return (
     <View style={styles.container}>
       <EditableText
         value={contactInfo.firstName}
         onChange={handleChange("firstName")}
-        isEditing={isCreation || isEditing}
+        isEditing={isEditView}
         placeholder="First Name"
         inputMode="text"
         keyboardType="default"
@@ -68,7 +79,7 @@ export const ContactForm = ({
       <EditableText
         value={contactInfo.lastName}
         onChange={handleChange("lastName")}
-        isEditing={isCreation || isEditing}
+        isEditing={isEditView}
         placeholder="Last Name"
         inputMode="text"
         keyboardType="default"
@@ -79,7 +90,7 @@ export const ContactForm = ({
       <EditableText
         value={contactInfo.phone}
         onChange={handleChange("phone")}
-        isEditing={isCreation || isEditing}
+        isEditing={isEditView}
         placeholder="Phone Number"
         inputMode="tel"
         keyboardType="phone-pad"
@@ -90,7 +101,7 @@ export const ContactForm = ({
       <EditableText
         value={contactInfo.email}
         onChange={handleChange("email")}
-        isEditing={isCreation || isEditing}
+        isEditing={isEditView}
         placeholder="Email"
         inputMode="email"
         keyboardType="email-address"
@@ -104,7 +115,7 @@ export const ContactForm = ({
       <EditableText
         value={contactInfo.type}
         onChange={handleChange("type")}
-        isEditing={isCreation || isEditing}
+        isEditing={isEditView}
         options={["Work", "Personal", "Random"]}
       />
       {isEditing && (
@@ -131,11 +142,4 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "black", paddingTop: 15 },
 });
 
-ContactForm.propTypes = {
-  isEditing: PropTypes.bool,
-  isCreation: PropTypes.bool,
-  handleDelete: PropTypes.func,
-  onContactInfoChange: PropTypes.func,
-  initialContactInfo: PropTypes.object,
-  setIsFormValid: PropTypes.func,
-};
+export default memo(ContactForm);

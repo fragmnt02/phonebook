@@ -1,57 +1,52 @@
+import { randomUUID } from "expo-crypto";
 import PropTypes from "prop-types";
-import { createContext, useCallback, useEffect, useReducer } from "react";
+import {
+  PropsWithChildren,
+  createContext,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 
 import Storage from "../module/Storage";
-import { randomUUID } from "expo-crypto";
+import { Contact, DraftContact } from "../types";
 
-export const ContactsContext = createContext();
-
-const initialState = {
-  contacts: null,
-  error: null,
-};
-
-function contactsReducer(state, action) {
-  switch (action.type) {
-    case "SET_CONTACTS":
-      return { ...state, contacts: action.payload };
-    case "SET_ERROR":
-      return { ...state, error: action.payload };
-    default:
-      return state;
-  }
+interface ContactsContextType {
+  contacts: Contact[] | null;
+  createContact: (contact: DraftContact) => Promise<void>;
+  updateContact: (contactId: string, updatedContact: Contact) => Promise<void>;
+  deleteContact: (contactId: string) => Promise<void>;
+  getContact: (contactId: string) => Promise<Contact | undefined>;
 }
 
-export const ContactsProvider = ({ children }) => {
-  const [{ contacts, error }, dispatch] = useReducer(
-    contactsReducer,
-    initialState
-  );
+export const ContactsContext = createContext<ContactsContextType>({
+  contacts: [],
+  createContact: (_contact: DraftContact) => Promise.resolve(),
+  updateContact: (_contactId: string, _updatedContact: Contact) =>
+    Promise.resolve(),
+  deleteContact: (_contactId: string) => Promise.resolve(),
+  getContact: (_contactId: string) => Promise.resolve(undefined),
+});
 
-  const setContactsCache = (contacts) => {
-    dispatch({ type: "SET_CONTACTS", payload: contacts });
-  };
+export const ContactsProvider = ({ children }: PropsWithChildren) => {
+  const [contactsCache, setContactsCache] = useState<Contact[] | null>(null);
 
-  const setError = (error) => {
-    dispatch({ type: "SET_ERROR", payload: error });
-  };
-
-  const getContacts = useCallback(async () => {
-    if (contacts !== null) {
-      return contacts;
+  const getContacts = useCallback(async (): Promise<Contact[]> => {
+    if (contactsCache !== null) {
+      return contactsCache;
     }
     try {
       const contacts = await Storage.getContacts();
       setContactsCache(contacts);
       return contacts;
     } catch (error) {
-      setError("Failed to fetch contacts");
       console.error("Failed to fetch contacts:", error);
+      return [];
     }
-  }, [contacts]);
+  }, [contactsCache]);
 
   const createContact = useCallback(
-    async (contact) => {
+    async (contact: DraftContact) => {
       try {
         const id = await randomUUID();
         const contacts = await getContacts();
@@ -61,32 +56,33 @@ export const ContactsProvider = ({ children }) => {
         console.error("Failed to create contact:", error);
       }
     },
-    [getContacts]
+    [getContacts],
   );
 
   const updateContact = useCallback(
-    async (contactId, updatedContact) => {
+    async (contactId: string, updatedContact: Contact) => {
       try {
-        let contacts = await getContacts();
+        const contacts = await getContacts();
         const index = contacts.findIndex((contact) => contact.id === contactId);
         if (index !== -1) {
-          contacts[index] = updatedContact;
-          await Storage.setContacts(contacts);
-          setContactsCache(contacts);
+          const updatedContacts = [...contacts];
+          updatedContacts[index] = updatedContact;
+          await Storage.setContacts(updatedContacts);
+          setContactsCache(updatedContacts);
         }
       } catch (error) {
         console.error("Failed to update contact:", error);
       }
     },
-    [getContacts]
+    [getContacts],
   );
 
   const deleteContact = useCallback(
-    async (contactId) => {
+    async (contactId: string) => {
       try {
         const contacts = await getContacts();
         const newContacts = contacts.filter(
-          (contact) => contact.id !== contactId
+          (contact) => contact.id !== contactId,
         );
         await Storage.setContacts(newContacts);
         setContactsCache(newContacts);
@@ -94,11 +90,11 @@ export const ContactsProvider = ({ children }) => {
         console.error("Failed to delete contact:", error);
       }
     },
-    [getContacts]
+    [getContacts],
   );
 
   const getContact = useCallback(
-    async (contactId) => {
+    async (contactId: string) => {
       try {
         const contacts = await getContacts();
         return contacts.find((contact) => contact.id === contactId);
@@ -106,7 +102,7 @@ export const ContactsProvider = ({ children }) => {
         console.error("Failed to get contact:", error);
       }
     },
-    [getContacts]
+    [getContacts],
   );
 
   useEffect(() => {
@@ -116,12 +112,11 @@ export const ContactsProvider = ({ children }) => {
   return (
     <ContactsContext.Provider
       value={{
-        contacts,
+        contacts: contactsCache,
         createContact,
         updateContact,
         deleteContact,
         getContact,
-        error,
       }}
     >
       {children}

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-expressions */
 import * as SecureStore from "expo-secure-store";
 import { Platform, Settings } from "react-native";
 

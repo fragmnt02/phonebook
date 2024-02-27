@@ -1,27 +1,35 @@
+import { useLocalSearchParams, Stack, useNavigation } from "expo-router";
 import { useContext, useEffect, useState } from "react";
 import { Alert, Pressable, StyleSheet, Text } from "react-native";
-import { useLocalSearchParams, Stack, useNavigation } from "expo-router";
 
+import ContactForm from "../../components/ContactForm";
 import { ContactsContext } from "../../providers/ContactsProvider";
-import { ContactForm } from "../../components/ContactForm";
+import { Contact, DraftContact } from "../../types";
 
 const ContactDetailScreen = () => {
   const navigation = useNavigation();
   const params = useLocalSearchParams();
+  const id = `${params.id}`;
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isFormValid, setIsFormValid] = useState(true);
-  const [contactInfo, setContactInfo] = useState();
-  const { getContact, updateContact, deleteContact } =  useContext(ContactsContext);
+  const [contactInfo, setContactInfo] = useState<Contact | DraftContact | null>(
+    null,
+  );
+  const { getContact, updateContact, deleteContact } =
+    useContext(ContactsContext);
 
   useEffect(() => {
     const loadContact = async () => {
-      if (!params.id) {
+      if (!id) {
         Alert.alert("Cant look for contact", "No contact id provided");
         return;
       }
-      const c = await getContact(params.id);
-      setContactInfo(c);
+      const contact = await getContact(id);
+      if (!contact) {
+        return;
+      }
+      setContactInfo(contact);
       setIsLoading(false);
     };
 
@@ -38,23 +46,23 @@ const ContactDetailScreen = () => {
     // save updated contact
     if (
       !isFormValid ||
-      !contactInfo.firstName ||
-      !contactInfo.lastName ||
-      !contactInfo.phone ||
-      !contactInfo.email
+      !contactInfo?.firstName ||
+      !contactInfo?.lastName ||
+      !contactInfo?.phone ||
+      !contactInfo?.email
     ) {
       Alert.alert(
         "Need to add all data",
-        "Should fill all name inputs and a valid email or phone number"
+        "Should fill all name inputs and a valid email or phone number",
       );
       return;
     }
-    await updateContact(params.id, contactInfo);
+    await updateContact(id, contactInfo as Contact);
     setIsEditing(false);
   };
 
   const handleDelete = async () => {
-    await deleteContact(params.id);
+    await deleteContact(id);
     navigation.goBack();
   };
 

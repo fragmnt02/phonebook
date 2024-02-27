@@ -1,12 +1,28 @@
-import PropTypes from "prop-types";
-import { StyleSheet, TextInput } from "react-native";
+import { memo } from "react";
+import { StyleSheet, TextInput, TextInputProps } from "react-native";
 
-export const TextInputField = ({
+interface InputProps {
+  autoComplete?: TextInputProps["autoComplete"];
+  inputMode?: TextInputProps["inputMode"];
+  keyboardType?: TextInputProps["keyboardType"];
+  placeholder?: string;
+  autoCapitalize?: TextInputProps["autoCapitalize"];
+  autoCorrect?: TextInputProps["autoCorrect"];
+}
+
+interface Props {
+  onChange: (value: string) => void;
+  value: string;
+  isValid: boolean;
+  textInputProps: InputProps;
+}
+
+const TextInputField = ({
   onChange,
   value,
   textInputProps,
   isValid,
-}) => (
+}: Props) => (
   <TextInput
     style={isValid ? styles.input : styles.invalidInput}
     onChangeText={onChange}
@@ -37,9 +53,4 @@ const styles = StyleSheet.create({
   },
 });
 
-TextInputField.propTypes = {
-  value: PropTypes.string,
-  onChange: PropTypes.func.isRequired,
-  isValid: PropTypes.bool.isRequired,
-  textInputProps: PropTypes.object,
-};
+export default memo(TextInputField);

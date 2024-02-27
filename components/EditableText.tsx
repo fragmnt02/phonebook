@@ -1,9 +1,23 @@
-import PropTypes from "prop-types";
 import { memo } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, TextInputProps } from "react-native";
 
-import { PickerField } from "./PickerField";
-import { TextInputField } from "./TextInputField";
+import PickerField from "./PickerField";
+import TextInputField from "./TextInputField";
+
+interface Props {
+  isEditing: boolean;
+  value: string;
+  onChange: (value: string) => void;
+  autoComplete?: TextInputProps["autoComplete"];
+  inputMode?: TextInputProps["inputMode"];
+  keyboardType?: TextInputProps["keyboardType"];
+  placeholder?: string;
+  autoCapitalize?: TextInputProps["autoCapitalize"];
+  autoCorrect?: TextInputProps["autoCorrect"];
+  prefix?: string;
+  options?: string[];
+  isValid?: boolean;
+}
 
 export const EditableText = ({
   isEditing,
@@ -18,7 +32,7 @@ export const EditableText = ({
   prefix = "",
   options = [],
   isValid = true,
-}) => {
+}: Props) => {
   const textInputProps = {
     autoComplete,
     inputMode,
@@ -46,34 +60,6 @@ export const EditableText = ({
       )}
     </View>
   );
-};
-
-EditableText.propTypes = {
-  isEditing: PropTypes.bool.isRequired,
-  value: PropTypes.string,
-  onChange: PropTypes.func.isRequired,
-  autoComplete: PropTypes.string,
-  inputMode: PropTypes.string,
-  keyboardType: PropTypes.string,
-  placeholder: PropTypes.string,
-  autoCapitalize: PropTypes.string,
-  autoCorrect: PropTypes.bool,
-  prefix: PropTypes.string,
-  options: PropTypes.arrayOf(PropTypes.string),
-  isValid: PropTypes.bool,
-};
-
-EditableText.defaultProps = {
-  value: "",
-  autoComplete: undefined,
-  inputMode: undefined,
-  keyboardType: undefined,
-  placeholder: undefined,
-  autoCapitalize: undefined,
-  autoCorrect: false,
-  prefix: "",
-  options: [],
-  isValid: true,
 };
 
 const styles = StyleSheet.create({

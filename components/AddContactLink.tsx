@@ -1,7 +1,8 @@
 import { Link } from "expo-router";
+import { memo } from "react";
 import { StyleSheet } from "react-native";
 
-export const AddContactLink = () => (
+const AddContactLink = () => (
   <Link href={{ pathname: "contact/create" }} style={styles.title}>
     Add
   </Link>
@@ -10,3 +11,5 @@ export const AddContactLink = () => (
 const styles = StyleSheet.create({
   title: { color: "white" },
 });
+
+export default memo(AddContactLink);

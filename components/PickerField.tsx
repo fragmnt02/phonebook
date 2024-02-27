@@ -1,8 +1,14 @@
 import { Picker } from "@react-native-picker/picker";
-import PropTypes from "prop-types";
+import { memo } from "react";
 import { Platform, StyleSheet } from "react-native";
 
-export const PickerField = ({ options, onChange, value }) => (
+interface Props {
+  options: string[];
+  onChange: (value: string) => void;
+  value: string;
+}
+
+const PickerField = ({ options, onChange, value }: Props) => (
   <Picker
     selectedValue={value}
     onValueChange={onChange}
@@ -38,8 +44,4 @@ const styles = StyleSheet.create({
   },
 });
 
-PickerField.propTypes = {
-  value: PropTypes.string,
-  onChange: PropTypes.func.isRequired,
-  options: PropTypes.arrayOf(PropTypes.string),
-};
+export default memo(PickerField);

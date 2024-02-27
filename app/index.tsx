@@ -1,21 +1,22 @@
+import { Stack } from "expo-router";
 import { useContext } from "react";
 import { View, FlatList, Text, StyleSheet } from "react-native";
-import { Stack } from "expo-router";
 
-import { ContactListItem } from "../components/ContactListItem";
-import { AddContactLink } from "../components/AddContactLink";
+import AddContactLink from "../components/AddContactLink";
+import ContactListItem from "../components/ContactListItem";
 import { ContactsContext } from "../providers/ContactsProvider";
+import { Contact } from "../types";
 
 const ContactList = () => {
   const { contacts } = useContext(ContactsContext);
 
   return (
     <>
-      <Stack.Screen options={{ headerRight: AddContactLink }} />
+      <Stack.Screen options={{ headerRight: () => <AddContactLink /> }} />
       <View style={styles.container}>
         <FlatList
-          data={(contacts ?? []).sort((a, b) =>
-            a.firstName.localeCompare(b.firstName)
+          data={(contacts ?? []).sort((a: Contact, b: Contact) =>
+            a.firstName.localeCompare(b.firstName),
           )}
           renderItem={({ item }) => <ContactListItem {...item} />}
           keyExtractor={(item) => item.id.toString()}
