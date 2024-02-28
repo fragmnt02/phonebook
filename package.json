@@ -1,34 +1,42 @@
 {
-  "name": "phonebook",
-  "version": "1.0.0",
-  "main": "expo-router/entry",
+  "name": "expo-settings",
+  "version": "0.1.0",
+  "description": "My new module",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
   "scripts": {
-    "lint": "eslint .",
-    "ts:check": "tsc",
-    "start": "expo start",
-    "android": "expo run:android",
-    "ios": "expo run:ios",
-    "web": "expo start --web",
-    "apk": "eas build -p android --profile preview"
+    "build": "expo-module build",
+    "clean": "expo-module clean",
+    "lint": "expo-module lint",
+    "test": "expo-module test",
+    "prepare": "expo-module prepare",
+    "prepublishOnly": "expo-module prepublishOnly",
+    "expo-module": "expo-module",
+    "open:ios": "open -a \"Xcode\" example/ios",
+    "open:android": "open -a \"Android Studio\" example/android"
   },
-  "dependencies": {
-    "@react-native-picker/picker": "2.6.1",
-    "@types/react": "~18.2.45",
-    "expo": "~50.0.7",
-    "expo-crypto": "~12.8.1",
-    "expo-router": "~3.4.7",
-    "expo-secure-store": "~12.8.1",
-    "expo-status-bar": "~1.11.1",
-    "react": "18.2.0",
-    "react-native": "0.73.4",
-    "typescript": "^5.3.0"
+  "keywords": [
+    "react-native",
+    "expo",
+    "expo-settings",
+    "ExpoSettings"
+  ],
+  "repository": "https://github.com/fragmnt02/expo-settings",
+  "bugs": {
+    "url": "https://github.com/fragmnt02/expo-settings/issues"
   },
+  "author": "fragmnt02 <fragmnt02@gmail.com> (https://github.com/fragmnt02)",
+  "license": "MIT",
+  "homepage": "https://github.com/fragmnt02/expo-settings#readme",
+  "dependencies": {},
   "devDependencies": {
-    "@babel/core": "^7.20.0",
-    "eslint": "^8.57.0",
-    "eslint-config-universe": "^12.0.0",
-    "eslint-plugin-react": "^7.33.2",
-    "prettier": "^3.2.5"
+    "@types/react": "^18.0.25",
+    "expo-module-scripts": "^3.4.0",
+    "expo-modules-core": "^1.11.2"
   },
-  "private": true
+  "peerDependencies": {
+    "expo": "*",
+    "react": "*",
+    "react-native": "*"
+  }
 }
